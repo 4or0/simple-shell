@@ -36,16 +36,15 @@ int main() {
         std::cerr << "Failed to open proc Error : " << GetLastError() << std::endl;
         return 1;
     }
-    int size = sizeof(simga::Shellcode);
     //this prob wont work on good ac games
-    LPVOID remote_buffer = VirtualAllocEx(hProcess, NULL, size, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+    LPVOID remote_buffer = VirtualAllocEx(hProcess, NULL, simga::size, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
     if (remote_buffer == NULL) {
         std::cerr << "Failed to alloc memory Error : " << GetLastError() << std::endl;
         CloseHandle(hProcess);
         return 1;
     }
     //if your game has a ac pls replace this
-    if (!WriteProcessMemory(hProcess, remote_buffer, simga::Shellcode, size, NULL)) {
+    if (!WriteProcessMemory(hProcess, remote_buffer, simga::Shellcode, simga::size, NULL)) {
         std::cerr << "Failed to write shellcode Error : " << GetLastError() << std::endl;
         VirtualFreeEx(hProcess, remote_buffer, 0, MEM_RELEASE);
         CloseHandle(hProcess);
